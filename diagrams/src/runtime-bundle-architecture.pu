@@ -15,10 +15,9 @@ left to right direction
 
 actor Dev as "Developer"
 
-rectangle "Dev Machine\nCLI / SDK" as CLI {}
+rectangle "Dev Machine\nCLI / SDK" as CLI
 
 cloud "Control Plane" as CP
-
 SimpleStorageService(REG, "Bundle Registry", "S3", "Signed bundle artifacts")
 
 frame "Hosted Engine Service" as Engine {
