@@ -13,9 +13,9 @@
     "tsx",
     "typescript"
   ],
-  "hostedBaseUrl": "https://docs.karmanivero.us/npm-package-template-ts",
+  "hostedBaseUrl": "https://docs.karmanivero.us/identity-engine",
   "navigationLinks": {
-    "GitHub": "https://github.com/karmaniverous/npm-package-template-ts"
+    "GitHub": "https://github.com/karmaniverous/identity-engine"
   },
   "out": "./docs/",
   "plugin": ["typedoc-plugin-mdn-links", "typedoc-plugin-replace-text"],

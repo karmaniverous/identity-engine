@@ -5,7 +5,7 @@ import { Command } from '@commander-js/extra-typings';
 import { fooCommand } from './fooCommand';
 
 const cli = new Command()
-  .name('mycli')
+  .name('ideng')
   .description('My CLI tool')
   .enablePositionalOptions()
   .passThroughOptions()
