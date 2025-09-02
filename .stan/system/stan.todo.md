@@ -26,4 +26,5 @@ When updated: 2025-09-02T17:28:00Z
 ## Completed (recent)
 
 - Repository context verified; created stan.project.md with endpoint map, constraints, and contracts.
-- Cleaned PlantUML diagram diagrams/src/runtime-bundle-architecture.pu to reduce overlaps and crossings.
+- Enhanced architecture diagram diagrams/src/runtime-bundle-architecture.pu
+  with Control Console (Web App, BFF, Read Model) and clean flows.

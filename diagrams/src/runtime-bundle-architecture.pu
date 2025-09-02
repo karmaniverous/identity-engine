@@ -15,8 +15,7 @@ left to right direction
 
 actor Dev as "Developer"
 
-rectangle "Dev Machine\nCLI / SDK" as CLI {
-}
+rectangle "Dev Machine\nCLI / SDK" as CLI {}
 
 cloud "Control Plane" as CP
 
@@ -36,6 +35,13 @@ cloud "Source Systems" as Sources
 frame "Tenant Destinations" as Dest {
   [Webhook Endpoint] as Webhook
   [Other Sinks (optional)] as Sinks
+}
+
+' Control Console (operator UX)
+frame "Control Console" as Console {
+  rectangle "Web App\n(Next.js)" as WebApp
+  rectangle "BFF\n(Node)" as BFF
+  database "Read Model\n(Projection)" as ReadModel
 }
 
 ' Control plane
@@ -60,5 +66,17 @@ Outbox ..> Sinks : optional
 ' Governance & observability
 Dest --> Orchestrator : overrides
 Engine ..> CLI : trace / shadow / metrics
+
+' Console interactions
+WebApp --> BFF : UI API
+BFF ..> WebApp : SSE/WS
+
+' BFF to engine/admin
+BFF --> Orchestrator : ops (overrides, merge, unmerge)
+BFF --> Engine : simulate/explain
+
+' Read model
+Engine ..> ReadModel : project events
+BFF --> ReadModel : search/list
 
 @enduml
