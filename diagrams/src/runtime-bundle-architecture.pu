@@ -6,6 +6,12 @@ title Runtime-loaded Bundle Artifact — High-level Architecture
 
 skinparam shadowing false
 skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+skinparam rectangleFontStyle normal
+skinparam noteBackgroundColor #F7F7F7
+
+left to right direction
 
 actor "Developer" as Dev
 
@@ -17,41 +23,49 @@ cloud "Control Plane" as CP
 
 SimpleStorageService(REG, "Bundle Registry", "S3", "Signed bundle artifacts")
 
-node "Hosted Engine Service" as Engine {
+frame "Hosted Engine Service" as Engine {
+  [Orchestrator] as Orchestrator
   [Bundle Loader] as Loader
   [Sandbox (SES/WASM)] as Sandbox
-  database "Entities Store" as Entities
   database "BlockIndex" as BlockIdx
+  database "Entities Store" as Entities
   rectangle "Outbox" as Outbox
 }
 
 cloud "Source Systems" as Sources
 
-rectangle "Tenant Destinations" as Dest {
+frame "Tenant Destinations" as Dest {
   [Webhook Endpoint] as Webhook
   [Other Sinks (optional)] as Sinks
 }
 
-' Control-plane & bundle lifecycle
-Dev --> CLI : author Zod/TS bundle\nand tests
-CLI --> CLI : ideng validate\n(local compile + tests)
+' Control plane & bundle lifecycle
+Dev --> CLI : author bundle\n(Zod/TS) + tests
+CLI --> CLI : ideng validate
 CLI --> CP : ideng publish\n(artifact + manifest)
-CP --> REG : store artifact
-CP --> Engine : activate bundle\n(canary/rollback)\n[notify reload]
-Engine --> Loader : load bundle (by id)
-Loader --> Sandbox : compile + cache isolate
+CP --> REG : store
+CP --> Engine : activate/canary/rollback
+Engine --> Loader : load bundle (id)
+Loader --> Sandbox : compile + cache
 
-' Data plane
-Sources --> Engine : ingest events
-Engine --> Sandbox : normalize / blockingKeys\nmatchEval (batched) / master
-Sandbox --> Engine : decisions + canonical
-Engine --> Entities : upsert entity + version
-Engine --> BlockIdx : write keys (TTL window)
-Engine --> Outbox : enqueue events
-Outbox --> Webhook : HMAC-signed deliveries
+' Data plane (inside engine via Orchestrator)
+Sources --> Orchestrator : ingest
+Orchestrator --> Sandbox : normalize + blocking\nmatchEval (batched) + master
+Sandbox --> Orchestrator : decisions + canonical
+Orchestrator --> BlockIdx : write keys\n(TTL window)
+Orchestrator --> Entities : upsert entity\n+ version
+Orchestrator --> Outbox : enqueue events
+Outbox --> Webhook : HMAC-signed webhooks
+Outbox -[dotted]-> Sinks : optional sinks
 
 ' Governance & observability
-Dest --> Engine : overrides API (must/cannot)\n(optional)
-Engine -[dotted]-> CLI : trace / shadow-run / metrics
+Dest --> Orchestrator : overrides API\n(must/cannot, optional)
+Engine ..> CLI : trace / shadow-run / metrics
+
+note bottom of Engine
+  Orchestrator enforces windows, overrides,\n
+  idempotency, tie-breakers, and outbox delivery.\n
+  Storage/index are centralized.
+end note
 
 @enduml
