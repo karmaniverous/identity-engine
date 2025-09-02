@@ -1,0 +1,57 @@
+@startuml runtime-bundle-architecture
+
+!include ../aws.pu
+
+title Runtime-loaded Bundle Artifact — High-level Architecture
+
+skinparam shadowing false
+skinparam linetype ortho
+
+actor "Developer" as Dev
+
+rectangle "Dev Machine" as DevBox {
+  [CLI / SDK] as CLI
+}
+
+cloud "Control Plane" as CP
+
+SimpleStorageService(REG, "Bundle Registry", "S3", "Signed bundle artifacts")
+
+node "Hosted Engine Service" as Engine {
+  [Bundle Loader] as Loader
+  [Sandbox (SES/WASM)] as Sandbox
+  database "Entities Store" as Entities
+  database "BlockIndex" as BlockIdx
+  rectangle "Outbox" as Outbox
+}
+
+cloud "Source Systems" as Sources
+
+rectangle "Tenant Destinations" as Dest {
+  [Webhook Endpoint] as Webhook
+  [Other Sinks (optional)] as Sinks
+}
+
+' Control-plane & bundle lifecycle
+Dev --> CLI : author Zod/TS bundle\nand tests
+CLI --> CLI : ideng validate\n(local compile + tests)
+CLI --> CP : ideng publish\n(artifact + manifest)
+CP --> REG : store artifact
+CP --> Engine : activate bundle\n(canary/rollback)\n[notify reload]
+Engine --> Loader : load bundle (by id)
+Loader --> Sandbox : compile + cache isolate
+
+' Data plane
+Sources --> Engine : ingest events
+Engine --> Sandbox : normalize / blockingKeys\nmatchEval (batched) / master
+Sandbox --> Engine : decisions + canonical
+Engine --> Entities : upsert entity + version
+Engine --> BlockIdx : write keys (TTL window)
+Engine --> Outbox : enqueue events
+Outbox --> Webhook : HMAC-signed deliveries
+
+' Governance & observability
+Dest --> Engine : overrides API (must/cannot)\n(optional)
+Engine -[dotted]-> CLI : trace / shadow-run / metrics
+
+@enduml

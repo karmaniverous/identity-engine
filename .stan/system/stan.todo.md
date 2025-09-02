@@ -1,9 +1,8 @@
 # Development Plan
 
-When updated: 2025-09-02T16:45:00Z
+When updated: 2025-09-02T17:28:00Z
 
 ## Next up
-
 - Add zod dependency and commit baseline schema module.
 - Define Zod event/response schemas under src/api/schemas for:
   - ingest, candidates, link, getEntity, listEntityRecords
@@ -27,3 +26,4 @@ When updated: 2025-09-02T16:45:00Z
 ## Completed (recent)
 
 - Repository context verified; created stan.project.md with endpoint map, constraints, and contracts.
+- Added PlantUML diagram diagrams/src/runtime-bundle-architecture.pu illustrating the runtime-loaded bundle artifact approach.
