@@ -1,0 +1,14 @@
+.nyc_output/
+.rollup.cache/
+.tsbuildinfo
+*.local
+local/
+coverage/
+dist/
+esm/
+node_modules/
+context/
+.stan/output/
+.stan/diff/
+.stan/dist/
+.stan/patch/

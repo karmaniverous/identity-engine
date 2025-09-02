@@ -1,0 +1,145 @@
+{
+  "author": "Jason Williscroft",
+  "bin": {
+    "mycli": "./dist/cli/mycli/index.js"
+  },
+  "auto-changelog": {
+    "output": "CHANGELOG.md",
+    "unreleased": true,
+    "commitLimit": false,
+    "hideCredit": true
+  },
+  "bugs": {
+    "url": "https://github.com/karmaniverous/npm-package-template-ts/issues"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  },
+  "description": "A feature-rich NPM package template for TypeScript projects.",
+  "devDependencies": {
+    "@commander-js/extra-typings": "^14.0.0",
+    "@dotenvx/dotenvx": "^1.49.0",
+    "@eslint/js": "^9.33.0",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.3.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "auto-changelog": "^2.5.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-tsdoc": "^0.4.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "fs-extra": "^11.3.1",
+    "happy-dom": "^18.0.1",
+    "knip": "^5.62.0",
+    "lefthook": "^1.12.3",
+    "prettier": "^3.6.2",
+    "release-it": "^19.0.4",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.46.4",
+    "rollup-plugin-dts": "^6.2.3",
+    "tslib": "^2.8.1",
+    "typedoc": "^0.28.10",
+    "typedoc-plugin-mdn-links": "^5.0.8",
+    "typedoc-plugin-replace-text": "^4.2.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.40.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mjs/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/karmaniverous/npm-package-template-ts#readme",
+  "keywords": [
+    "eslint",
+    "lefthook",
+    "npm",
+    "prettier",
+    "rollup",
+    "template",
+    "typescript",
+    "vitest"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "name": "@karmaniverous/npm-package-template-ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "release-it": {
+    "git": {
+      "changelog": "npx auto-changelog --unreleased-only --stdout --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
+      "commitMessage": "chore: release v${version}",
+      "requireBranch": "main"
+    },
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "after:init": [
+        "npm run lint",
+        "npm run test",
+        "npm run knip",
+        "npm run build"
+      ],
+      "before:npm:release": [
+        "npx auto-changelog -p",
+        "npm run docs",
+        "git add -A"
+      ],
+      "after:release": [
+        "git switch -c release/${version}",
+        "git push -u origin release/${version}",
+        "git switch ${branchName}"
+      ]
+    },
+    "npm": {
+      "publish": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karmaniverous/npm-package-template-ts.git"
+  },
+  "scripts": {
+    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "changelog": "auto-changelog",
+    "diagrams": "cd diagrams/src && plantuml -tpng -o ../out -r .",
+    "docs": "typedoc",
+    "knip": "knip",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "release": "dotenvx run -f .env.local -- release-it",
+    "release:pre": "dotenvx run -f .env.local -- release-it --no-git.requireBranch --github.prerelease --preRelease",
+    "stan:build": "rimraf stan.dist && rollup --config stan.rollup.config.ts --configPlugin @rollup/plugin-typescript && rimraf stan.dist",
+    "stan:docs": "typedoc --emit none",
+    "test": "vitest --run --coverage",
+    "typecheck": "tsc"
+  },
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "version": "0.6.13"
+}
