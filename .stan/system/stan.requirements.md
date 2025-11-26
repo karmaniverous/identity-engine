@@ -1,4 +1,4 @@
-# Project Prompt — Identity Engine
+# Requirements — Identity Engine
 
 This file records durable, repo-specific requirements and decisions that guide implementation and reviews.
 
@@ -157,12 +157,12 @@ Commands read an event JSON object (stdin or --file) that must conform to the co
 
 ## File layout (to be implemented)
 
-- src/api/schemas/*.ts (Zod event/response schemas, re‑exported via index)
-- src/api/handlers/*.ts (pure handler factories; export makeHandlers)
-- src/api/deps/*.ts (interface types; mocks in src/mocks)
-- src/mocks/* (in‑memory stores: EntitiesStore, BlockIndexStore, Outbox, ApiKeyRepo; clock, id)
-- src/cli/ideng/* (Commander commands; each wraps a handler)
-- test/* (unit + CLI tests)
+- src/api/schemas/\*.ts (Zod event/response schemas, re‑exported via index)
+- src/api/handlers/\*.ts (pure handler factories; export makeHandlers)
+- src/api/deps/\*.ts (interface types; mocks in src/mocks)
+- src/mocks/\* (in‑memory stores: EntitiesStore, BlockIndexStore, Outbox, ApiKeyRepo; clock, id)
+- src/cli/ideng/\* (Commander commands; each wraps a handler)
+- test/\* (unit + CLI tests)
 
 ## Non‑goals in this phase
 
