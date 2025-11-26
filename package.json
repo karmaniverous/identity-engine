@@ -15,7 +15,7 @@
   "dependencies": {
     "commander": "^14.0.0"
   },
-  "description": "A feature-rich NPM package template for TypeScript projects.",
+  "description": "Deterministic identity-resolution engine in TypeScript: Zod-validated handlers, mocked deps, and a CLI that mirrors the future HTTP API.",
   "devDependencies": {
     "@commander-js/extra-typings": "^14.0.0",
     "@dotenvx/dotenvx": "^1.49.0",
@@ -73,13 +73,25 @@
   ],
   "homepage": "https://github.com/karmaniverous/identity-engine#readme",
   "keywords": [
-    "eslint",
-    "lefthook",
-    "npm",
-    "prettier",
-    "rollup",
-    "template",
+    "identity-resolution",
+    "entity-matching",
+    "record-linkage",
+    "mastering",
+    "deduplication",
+    "customer-360",
+    "golden-record",
+    "zod",
     "typescript",
+    "cli",
+    "commander",
+    "schema-validation",
+    "deterministic",
+    "idempotency",
+    "overrides",
+    "tenants",
+    "api",
+    "mocks",
+    "in-memory",
     "vitest"
   ],
   "license": "BSD-3-Clause",
@@ -141,5 +153,5 @@
   },
   "type": "module",
   "types": "dist/index.d.ts",
-  "version": "0.6.13"
+  "version": "0.0.0"
 }

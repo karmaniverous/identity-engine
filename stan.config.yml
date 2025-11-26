@@ -1,17 +1,19 @@
-cliDefaults:
-  run:
-    sequential: true
-excludes:
-  - docs
-  - package-lock.json
-includes: []
-patchOpenCommand: code -g {file}
-scripts:
-  typecheck: npm run typecheck
-  lint: npm run lint
-  test: npm run test
-  diagrams: npm run diagrams
-  docs: npm run stan:docs
-  build: npm run stan:build
-  knip: npm run knip
-stanPath: .stan
+stan-core:
+  stanPath: .stan
+  includes: []
+  excludes:
+    - docs
+    - package-lock.json
+stan-cli:
+  scripts:
+    typecheck: npm run typecheck
+    lint: npm run lint
+    test: npm run test
+    diagrams: npm run diagrams
+    docs: npm run stan:docs
+    build: npm run stan:build
+    knip: npm run knip
+  cliDefaults:
+    run:
+      sequential: true
+  patchOpenCommand: code -g {file}
