@@ -1,6 +1,6 @@
-# Identity Engine
+> **THIS IS A DESIGN PHASE PROJECT.** This repo currently contains project scaffolding, [requirements](.stan/system/stan.requirements.md), and this conceptual README. No installation or usage is expected at this time.
 
-Status: design/spec phase. This repo currently contains project scaffolding, [requirements](.stan/system/stan.requirements.md), and this conceptual README. No installation or usage is expected at this time.
+# Identity Engine
 
 Identity Engine is a deterministic identity‑resolution and entity‑mastering engine written in TypeScript. It ingests records, proposes match candidates, links records into entities with override support, and enforces idempotency and windowing policies. All handlers are pure functions created by a factory makeHandlers(deps) and validated with Zod (inputs and outputs). A CLI will mirror the future HTTP endpoints by accepting an event JSON and returning a validated JSON response.
 
